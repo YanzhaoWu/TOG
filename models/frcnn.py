@@ -1,7 +1,7 @@
 import sys
 import os
-sys.path.append(os.path.abspath('/research/projects/robust-object-detection/frcnn_utils/pytorch-faster-rcnn/lib'))
-sys.path.append(os.path.abspath('/research/projects/robust-object-detection/frcnn_utils/pytorch-faster-rcnn/tools'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../frcnn_utils/pytorch-faster-rcnn/lib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../frcnn_utils/pytorch-faster-rcnn/tools'))
 from frcnn_utils.utils.creator_tool import AnchorTargetCreator, ProposalTargetCreator
 from frcnn_utils.model import FRCNN_VGG16
 from collections import namedtuple

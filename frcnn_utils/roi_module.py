@@ -11,7 +11,7 @@ from frcnn_utils.utils.roi_cupy import kernel_backward, kernel_forward
 Stream = namedtuple('Stream', ['ptr'])
 
 
-@cupy.util.memoize(for_each_device=True)
+@cupy.memoize(for_each_device=True)
 def load_kernel(kernel_name, code, **kwargs):
     cp.cuda.runtime.free(0)
     code = Template(code).substitute(**kwargs)
@@ -26,8 +26,9 @@ def GET_BLOCKS(N, K=CUDA_NUM_THREADS):
     return (N + K - 1) // K
 
 
-class RoI(Function):
+class RoIPooling2D(t.nn.Module):
     def __init__(self, outh, outw, spatial_scale):
+        super(RoIPooling2D, self).__init__()
         self.forward_fn = load_kernel('roi_forward', kernel_forward)
         self.backward_fn = load_kernel('roi_backward', kernel_backward)
         self.outh, self.outw, self.spatial_scale = outh, outw, spatial_scale
@@ -73,16 +74,6 @@ class RoI(Function):
                          stream=stream
                          )
         return grad_input, None
-
-
-class RoIPooling2D(t.nn.Module):
-
-    def __init__(self, outh, outw, spatial_scale):
-        super(RoIPooling2D, self).__init__()
-        self.RoI = RoI(outh, outw, spatial_scale)
-
-    def forward(self, x, rois):
-        return self.RoI(x, rois)
 
 
 def test_roi_module():
