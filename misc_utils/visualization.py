@@ -1,6 +1,29 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+class_id_map = {
+    'aeroplane':0,
+    'bicycle':1,
+    'bird':2,
+    'boat':3,
+    'bottle':4,
+    'bus':5,
+    'car':6,
+    'cat':7,
+    'chair':8,
+    'cow':9,
+    'diningtable':10,
+    'dog':11,
+    'horse':12,
+    'motorbike':13,
+    'person':14,
+    'pottedplant':15,
+    'sheep':16,
+    'sofa':17,
+    'train':18,
+    'tvmonitor':19,
+    'background':-1,
+}
 
 def visualize_detections(detections_dict):
     colors = plt.cm.hsv(np.linspace(0, 1, 21)).tolist()
@@ -19,7 +42,7 @@ def visualize_detections(detections_dict):
             ymin = max(int(box[-3] * input_img.shape[0] / model_img_size[0]), 0)
             xmax = min(int(box[-2] * input_img.shape[1] / model_img_size[1]), input_img.shape[1])
             ymax = min(int(box[-1] * input_img.shape[0] / model_img_size[0]), input_img.shape[0])
-            color = colors[int(box[0])]
+            color = colors[class_id_map[classes[int(box[0])]]]
             label = '{}: {:.2f}'.format(classes[int(box[0])], box[1])
             current_axis.add_patch(
                 plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, color=color, fill=False, linewidth=2))
