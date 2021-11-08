@@ -28,6 +28,8 @@ def tog_fabrication(victim, x_query, n_iter=10, eps=8/255., eps_iter=2/255.):
 
 def tog_mislabeling(victim, x_query, target, n_iter=10, eps=8/255., eps_iter=2/255.):
     detections_query = victim.detect(x_query, conf_threshold=victim.confidence_thresh_default)
+    if len(detections_query) == 0: # no label
+        return x_query
     detections_target = generate_attack_targets(detections_query, confidence_threshold=victim.confidence_thresh_default,
                                                 mode=target)
     eta = np.random.uniform(-eps, eps, size=x_query.shape)
